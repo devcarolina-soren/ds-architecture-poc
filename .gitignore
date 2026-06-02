@@ -1,0 +1,5 @@
+node_modules/
+storybook-static/
+apps/docs/storybook-static/
+dist/
+.turbo/

@@ -1,0 +1,27 @@
+{
+  "name": "design-system-foundation",
+  "private": true,
+  "packageManager": "yarn@1.22.22",
+  "type": "module",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "storybook": "yarn workspace @ast/docs storybook"
+  },
+  "devDependencies": {
+    "@storybook/addon-essentials": "8",
+    "@storybook/react-vite": "^8.6.18",
+    "@types/react": "^19.2.16",
+    "@types/react-dom": "^19.2.3",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "storybook": "^8.6.18",
+    "turbo": "^2.9.16",
+    "typescript": "^5.9.3",
+    "vite": "^5.4.21"
+  }
+}
