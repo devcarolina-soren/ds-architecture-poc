@@ -1,5 +1,5 @@
 {
-  "name": "@ast/ui",
+  "name": "@ast/web",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "@ast/icons": "*",
-    "@ast/tokens": "*",
+    "@ast/primitives": "*",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
   }

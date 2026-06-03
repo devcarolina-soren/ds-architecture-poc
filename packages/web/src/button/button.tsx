@@ -1,4 +1,4 @@
-import { colors, spacing } from "@ast/tokens";
+import { colors, spacing } from "@ast/primitives";
 import type { CSSProperties, ReactNode } from "react";
 import "./button.css";
 

@@ -11,7 +11,7 @@ const iconOptions = {
 } as const;
 
 const meta = {
-  title: "Shared UI/IconButton",
+  title: "Web/IconButton",
   component: IconButton,
   args: {
     icon: searchIcon,

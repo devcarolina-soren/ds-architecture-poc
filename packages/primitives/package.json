@@ -1,5 +1,5 @@
 {
-  "name": "@ast/tokens",
+  "name": "@ast/primitives",
   "version": "0.0.0",
   "private": true,
   "type": "module",
