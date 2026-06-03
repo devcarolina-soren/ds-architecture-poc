@@ -30,7 +30,7 @@ export default [
       "boundaries/elements": [
         {
           mode: "folder",
-          pattern: "packages/web/src/*",
+          pattern: "packages/web/src/ui/*",
           type: "web-component"
         },
         {
@@ -53,7 +53,7 @@ export default [
     }
   },
   {
-    files: ["packages/web/src/*/**/*.{ts,tsx}"],
+    files: ["packages/web/src/ui/*/**/*.{ts,tsx}"],
     rules: {
       "no-restricted-imports": [
         "error",
