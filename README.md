@@ -1,4 +1,8 @@
-# Design System Architecture PoC
+<h1 align="center">Design System Architecture PoC</h1>
+
+<p align="center">
+  English | <a href="./README.pt.md">Português</a>
+</p>
 
 ## Goal
 
