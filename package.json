@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "turbo dev",
     "build": "turbo build",
+    "lint": "eslint .",
     "storybook": "yarn workspace @ast/docs storybook"
   },
   "devDependencies": {
@@ -17,6 +18,9 @@
     "@storybook/react-vite": "^8.6.18",
     "@types/react": "^19.2.16",
     "@types/react-dom": "^19.2.3",
+    "@typescript-eslint/parser": "8.55.0",
+    "eslint": "9",
+    "eslint-plugin-boundaries": "6.0.2",
     "react": "^19.2.7",
     "react-dom": "^19.2.7",
     "storybook": "^8.6.18",

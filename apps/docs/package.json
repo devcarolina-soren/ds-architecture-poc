@@ -10,8 +10,8 @@
   },
   "dependencies": {
     "@ast/icons": "*",
-    "@ast/tokens": "*",
-    "@ast/ui": "*",
+    "@ast/primitives": "*",
+    "@ast/web": "*",
     "react": "^19.2.7",
     "react-dom": "^19.2.7"
   }

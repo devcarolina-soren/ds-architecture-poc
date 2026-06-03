@@ -2,7 +2,7 @@ import { iconNames } from "@ast/icons";
 import arrowRightIcon from "@ast/icons/arrow-right.svg";
 import closeIcon from "@ast/icons/close.svg";
 import searchIcon from "@ast/icons/search.svg";
-import { colors, spacing } from "@ast/tokens";
+import { colors, spacing } from "@ast/primitives";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const iconSources = {

@@ -1,24 +1,21 @@
 # Design System Architecture PoC
 
-Portuguese version: [README.pt.md](./README.pt.md)
-
 ## Goal
 
-This PoC aims to validate an architectural proposal for a Design System using Monorepo, React, TypeScript, and Storybook.
+This PoC validates a simple monorepo using React, TypeScript, and Storybook.
 
-The structure follows Feature-Sliced Design (FSD) principles at its most abstract layer, using only `shared/ui` to organize reusable, domain-independent components.
+The architecture was inspired by Feature-Sliced Design (FSD), mainly around responsibility-based organization and dependency control between modules, adapted to a monorepo context.
 
-The proposal uses layered separation to ensure visual foundations (`tokens` and `icons`) remain independent from component implementation (`ui`) and documentation (`docs`).
-
-The focus is not on building a complete or production-ready library, but on evaluating how to organize visual foundations, assets, components, and documentation in a decoupled way.
+The goal is not to build a complete or production-ready library, but to organize primitives, icons, web components, and documentation with clear boundaries between packages.
 
 The main points evaluated are:
 
-* Clear separation of responsibilities.
-* Unidirectional dependencies between packages.
-* Reusable tokens across different platforms.
-* Components decoupled from the visual foundation.
-* Storybook as a consumer and documentation layer for the system.
+* Clear separation of responsibilities between packages
+* Unidirectional dependencies
+* Reusable primitives across different applications
+* Components decoupled from primitives and icons
+* Storybook as a consumer of the system
+* Lint rules ensuring only public APIs are used
 
 ---
 
@@ -29,26 +26,17 @@ apps/
 └── docs/
 
 packages/
-├── tokens/
+├── primitives/
 ├── icons/
-└── ui/
+└── web/
 ```
 
-The proposal divides the Design System into three layers:
+Responsibilities:
 
-```text
-Foundation
-├── tokens
-└── icons
-
-Presentation
-└── ui
-
-Consumer
-└── docs
-```
-
-Each layer has a specific responsibility and avoids depending on higher-level layers.
+* `@ast/primitives` exposes platform-independent design values, such as colors and spacing
+* `@ast/icons` keeps SVGs as plain files exposed through a typed catalog and public package exports
+* `@ast/web` exposes React components through a public API
+* `@ast/docs` consumes the packages through Storybook
 
 ---
 
@@ -56,27 +44,26 @@ Each layer has a specific responsibility and avoids depending on higher-level la
 
 ```text
 docs
- └── ui
-      ├── tokens
+ └── web
+      ├── primitives
       └── icons
 ```
 
-Architecture rules:
+Rules:
 
-* `ui` can consume `tokens` and `icons`.
-* `docs` can consume any package.
-* `tokens` does not depend on `ui`.
-* `icons` does not depend on `ui`.
-
-The goal is to keep the Design System foundation decoupled from component implementation.
+* `web` can consume `primitives` and `icons`
+* `docs` consumes only public package APIs
+* `primitives` does not depend on `web`
+* `icons` does not depend on `web`
+* components inside `web` do not import internals from other components
 
 ---
 
-## Tokens
+## Primitives
 
-`@ast/tokens` represents the visual foundation of the Design System.
+`@ast/primitives` represents the visual foundation of the system.
 
-Tokens are defined in TypeScript and act as the single source of truth for design values such as colors and spacing.
+They are TypeScript values used as a base for styles.
 
 ```ts
 export const colors = {
@@ -92,16 +79,16 @@ export const spacing = {
 
 ### Why TypeScript?
 
-The first idea was to use SCSS and CSS Variables, but that would limit token consumption to more web-oriented solutions.
+The initial idea was to use SCSS and CSS variables, but that kept the foundation tied to the web context.
 
-By using TypeScript as the source of truth, the same values can be consumed by different platforms without depending on the browser or on a specific styling technology.
+With TypeScript, the same values can be used across different environments without depending on the browser or CSS.
 
 ### Consumption Example
 
 Web:
 
 ```ts
-import { colors, spacing } from "@ast/tokens";
+import { colors, spacing } from "@ast/primitives";
 
 const style = {
   backgroundColor: colors.primary,
@@ -113,7 +100,7 @@ React Native:
 
 ```ts
 import { StyleSheet } from "react-native";
-import { colors, spacing } from "@ast/tokens";
+import { colors, spacing } from "@ast/primitives";
 
 const styles = StyleSheet.create({
   button: {
@@ -123,15 +110,13 @@ const styles = StyleSheet.create({
 });
 ```
 
-Consumption remains almost the same because the tokens have no platform dependency.
-
 ---
 
 ## Icons
 
-`@ast/icons` is responsible for cataloging the visual assets of the Design System.
+`@ast/icons` centralizes the system SVGs.
 
-The package keeps SVGs as plain files and exposes a typed catalog of the available icons.
+The files live in `assets/` and are exposed through a typed catalog and public package exports.
 
 ```ts
 export const iconNames = [
@@ -143,11 +128,9 @@ export const iconNames = [
 
 ### Why plain SVGs?
 
-The goal is to keep the foundation independent from the technology used for rendering.
+The goal is to keep assets independent from rendering technology.
 
-The package defines which icons exist, but not how they should be rendered.
-
-That responsibility belongs to the consuming application.
+The package defines which icons exist, but not how they are rendered. That responsibility belongs to the consuming application.
 
 ### Consumption Example
 
@@ -169,34 +152,25 @@ export function Example() {
 }
 ```
 
-The loading and rendering strategy depends on the platform and the tools used by the consuming application.
-
-The role of `@ast/icons` is only to distribute the assets and keep a centralized catalog of the available icons.
-
 ---
 
-## UI
+## Web
 
-`@ast/ui` is the layer responsible for the React components of the Design System.
+`@ast/web` contains the system React components.
 
-It is the only package in the PoC that knows about React and consumes the foundation packages (`tokens` and `icons`).
+It is the only package in the library that uses React and depends on `@ast/primitives` and `@ast/icons`.
 
-This allows the foundation to evolve independently from component implementation.
+### Structure
 
-### Organization
-
-The structure follows a simplified application of Feature-Sliced Design.
+Components live in `packages/web/src`:
 
 ```text
-shared/
-└── ui/
-    ├── button/
-    └── icon-button/
+packages/web/src/
+├── button/
+└── icon-button/
 ```
 
-Since the PoC has no domain, business rules, or features, only the `shared/ui` layer was used.
-
-Each component keeps its artifacts co-located:
+Each component is self-contained:
 
 ```text
 button/
@@ -206,91 +180,79 @@ button/
 └── index.ts
 ```
 
-This approach improves navigation, maintenance, and component ownership.
+### Consumption
+
+```ts
+import { Button, IconButton } from "@ast/web";
+```
 
 ---
 
 ## Docs
 
-`apps/docs` is a Storybook application responsible for the visual documentation of the Design System.
+`apps/docs` is the Storybook app for the monorepo.
 
-It consumes the monorepo packages and visually demonstrates:
+It consumes the packages and documents:
 
-* Tokens.
-* Icons.
-* Components.
-
-### Why Storybook?
-
-Storybook allows the proposed architecture to be visually validated without creating a dedicated consuming application.
-
-It also helps demonstrate:
-
-* Token consumption.
-* Asset consumption.
-* Component behavior.
+* primitives
+* icons
+* components
 
 ### Responsibility
 
-Storybook is not part of the Design System foundation.
+Storybook is only a consumer of the system.
 
-It acts only as a consumer and documentation tool.
-
-For this reason:
-
-* Component stories stay close to the components.
-* Foundation stories stay in `apps/docs`.
-
-This prevents foundation packages from conceptually depending on React or Storybook.
+* Component stories live in `web`
+* Foundation stories live in `docs`
 
 ---
 
-## Benefits Of This Approach
+## Import Enforcement
 
-* Clear separation of responsibilities.
-* Predictable dependencies between packages.
-* Foundation reusable across platforms.
-* Components decoupled from the visual foundation.
-* Easy-to-understand structure.
-* Co-location-based organization.
-* Explicit public APIs.
+ESLint enforces boundaries between packages through controlled import rules.
 
----
+The rules block:
 
-## Out Of Scope
+* deep imports (`@ast/web/button`)
+* direct access to `@ast/icons/assets/*`
+* internal imports between components inside `web`
 
-This PoC does not validate:
+Allowed:
 
-* Package publishing.
-* Versioning strategies.
-* CI/CD.
-* Design System governance.
-* Full cross-platform compatibility.
-* Automatic token generation.
-* Style Dictionary.
-* Advanced build strategies.
-* Automated tests.
-
-These topics are important in a real Design System, but they are not part of this validation goal.
+* `@ast/icons/*.svg` as a public API
+* local imports inside the component (`./button.css`)
 
 ---
 
-## Running The Project
+## Benefits
 
-Install dependencies:
+* Clear separation of responsibilities
+* Predictable dependencies between packages
+* Reusable primitives outside web
+* Components decoupled from the visual foundation
+* Simple structure
+* Consistent co-location
+* Explicit public APIs
+
+---
+
+## Out of Scope
+
+* package versioning
+* CI/CD
+* publishing
+* governance
+* automatic primitive generation
+* advanced design tokens
+* automated tests
+
+---
+
+## Running the Project
 
 ```bash
 yarn install
-```
-
-Run Storybook:
-
-```bash
 yarn storybook
-```
-
-Validate the build:
-
-```bash
 yarn build
+yarn lint
 ```

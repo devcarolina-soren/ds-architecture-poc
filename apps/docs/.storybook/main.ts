@@ -8,7 +8,7 @@ const config: StorybookConfig = {
     name: "@storybook/react-vite",
     options: {}
   },
-  stories: ["../src/**/*.stories.tsx", "../../../packages/ui/src/**/*.stories.tsx"],
+  stories: ["../src/**/*.stories.tsx", "../../../packages/web/src/**/*.stories.tsx"],
   viteFinal: (config) =>
     mergeConfig(config, {
       resolve: {

@@ -11,7 +11,7 @@ const preview: Preview = {
     },
     options: {
       storySort: {
-        order: ["Foundations", "Shared UI"]
+        order: ["Foundations", "Web"]
       }
     }
   }

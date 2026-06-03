@@ -1,4 +1,4 @@
-import { colors as colorTokens, spacing } from "@ast/tokens";
+import { colors as colorTokens, spacing } from "@ast/primitives";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const colors = [
@@ -63,7 +63,7 @@ function ColorsFoundation() {
     <div style={{ display: "grid", gap: "16px" }}>
       <h1 style={{ margin: 0 }}>Color Tokens</h1>
       <p style={{ margin: 0, maxWidth: "720px" }}>
-        Platform-independent tokens exposed by the <code>@ast/tokens</code> package as TypeScript objects.
+        Platform-independent primitives exposed by the <code>@ast/primitives</code> package as TypeScript objects.
       </p>
 
       <div
