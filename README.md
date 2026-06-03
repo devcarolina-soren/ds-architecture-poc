@@ -166,23 +166,32 @@ It is the only package in the library that uses React and depends on `@ast/primi
 
 ### Structure
 
-Components live in `packages/web/src`:
+Visual components live in `packages/web/src/ui`:
 
 ```text
 packages/web/src/
-├── button/
-└── icon-button/
+└── ui/
+    ├── button/
+    └── icon-button/
 ```
 
 Each component is self-contained:
 
 ```text
-button/
+ui/button/
 ├── button.tsx
 ├── button.css
 ├── button.stories.tsx
 └── index.ts
 ```
+
+### Evolution
+
+The `src` structure anticipates the segments expected in the main design system:
+
+* `ui/`: visual components (current)
+* `lib/`: shared hooks and utilities
+* `api/`: integrations and external services
 
 ### Consumption
 

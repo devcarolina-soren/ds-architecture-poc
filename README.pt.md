@@ -166,23 +166,32 @@ export function Example() {
 
 ### Estrutura
 
-Os componentes vivem em `packages/web/src`:
+Os componentes visuais vivem em `packages/web/src/ui`:
 
 ```text
 packages/web/src/
-├── button/
-└── icon-button/
+└── ui/
+    ├── button/
+    └── icon-button/
 ```
 
 Cada componente é autocontido:
 
 ```text
-button/
+ui/button/
 ├── button.tsx
 ├── button.css
 ├── button.stories.tsx
 └── index.ts
 ```
+
+### Evolução
+
+A estrutura em `src` antecipa os segmentos esperados para o design system principal:
+
+* `ui/`: componentes visuais (atual)
+* `lib/`: hooks e utilitários compartilhados
+* `api/`: integrações e serviços externos
 
 ### Consumo
 
